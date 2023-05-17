@@ -1,7 +1,6 @@
 package com.example.employeemanagement.Controller;
 
-import com.example.employeemanagement.Model.Employee;
-import com.example.employeemanagement.Model.EmployeeRepository;
+import com.example.employeemanagement.Model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class LoginWindowController {
     @FXML
@@ -20,24 +20,36 @@ public class LoginWindowController {
 
 
     private EmployeeRepository employeeRepository;
+    private WorkerRepository workerRepository;
 
     @FXML
-    public void loginBttnClick() throws IOException {
+    public void loginButtonClick() throws IOException {
         String usernamme = usernameTxt.getText();
         String password = passwordTxt.getText();
 
 
-        int result = checkFields(usernamme, password);
-        if (result != -1) {
-            FXMLLoader loader = switch (result) {
-                case 1 ->
-                        new FXMLLoader(getClass().getClassLoader().getResource("com/example/employeemanagement.views/BossWindow.fxml"));
-                case 2 ->
-                        new FXMLLoader(getClass().getClassLoader().getResource("com/example/employeemanagement.views/WorkerWindow.fxml"));
-                default -> null;
-            };
+        Employee employee = checkFields(usernamme, password);
+        if (employee != null) {
+            FXMLLoader loader;
+            Parent root;
+            if(employee.getIsBoss()){
+                loader = new FXMLLoader(getClass().getClassLoader().getResource("com/example/employeemanagement.views/BossWindow.fxml"));
+                root = loader.load();
+                BossWindowController bossCtrl = loader.<BossWindowController>getController();
+                Boss boss = new Boss(employee.getName(), employee.getUsername(), employee.getPassword(), employee.getIsBoss());
+                bossCtrl.setBoss(boss);
+            }
+            else{
+                loader = new FXMLLoader(getClass().getClassLoader().getResource("com/example/employeemanagement.views/WorkerWindow.fxml"));
+                root = loader.load();
+                WorkerWindowController workerCtrl = loader.<WorkerWindowController>getController();
+                Worker worker = new Worker(employee.getName(), employee.getUsername(), employee.getPassword(), employee.getIsBoss());
+                worker.setLogInTime(LocalDateTime.now());
+                workerRepository.updateLoginTime(worker);
+                workerCtrl.setWorker(worker);
+                workerCtrl.setWorkerRepository(workerRepository);
+            }
 
-            Parent root = loader.load();
             Stage loginStage = new Stage();
             loginStage.setScene(new Scene(root));
             loginStage.show();
@@ -45,21 +57,21 @@ public class LoginWindowController {
         }
     }
 
-    private int checkFields(String username, String password) {
+    private Employee checkFields(String username, String password) {
         Employee employee = employeeRepository.findEmployee(username, password);
-        if (employee == null)
-            return -1;
-        if (employee.getIsBoss())
-            return 1;
-        else return 2;
-    }
-
-    public void setRepo(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+        return employee;
     }
 
     private void close() {
         Stage thisStage = (Stage) usernameTxt.getScene().getWindow();
         thisStage.close();
     }
+
+    public void setEmployeeRepository(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+    public void setWorkerRepository(WorkerRepository workerRepository) {
+        this.workerRepository = workerRepository;
+    }
+
 }
