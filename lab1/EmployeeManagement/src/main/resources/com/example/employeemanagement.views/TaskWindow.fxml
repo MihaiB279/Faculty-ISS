@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="383.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.employeemanagement.Controller.TasksWindowController">
+   <children>
+      <TableView fx:id="taskTable" layoutX="60.0" layoutY="13.0" prefHeight="374.0" prefWidth="263.0">
+         <columns>
+            <TableColumn fx:id="nameColumn" prefWidth="143.20003509521484" text="Task" />
+            <TableColumn fx:id="statusColumn" prefWidth="124.79998779296875" text="Status" />
+         </columns>
+      </TableView>
+   </children>
+</AnchorPane>

@@ -44,10 +44,6 @@ public class Employee {
         return isboss;
     }
 
-    public void setIsBoss(Boolean isboss) {
-        this.isboss = isboss;
-    }
-
     public Employee(){}
     public Employee(String name, String username, String password, Boolean isboss) {
         this.name = name;

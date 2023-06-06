@@ -22,5 +22,6 @@
         <mapping class="com.example.employeemanagement.Model.Employee"/>
         <mapping class="com.example.employeemanagement.Model.Boss"/>
         <mapping class="com.example.employeemanagement.Model.Worker"/>
+        <mapping class="com.example.employeemanagement.Model.Task"/>
     </session-factory>
 </hibernate-configuration>

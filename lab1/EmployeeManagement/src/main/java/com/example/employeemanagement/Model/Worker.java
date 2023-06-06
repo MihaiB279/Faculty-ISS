@@ -34,11 +34,28 @@ public class Worker extends Employee {
         logoutHour = time;
         status = WorkerStatus.ABSENT;
     }
-    public LocalDateTime getLogInTime() {
+
+    public WorkerStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(WorkerStatus status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getLoginHour() {
         return loginHour;
     }
-    public LocalDateTime getLogOutTime() {
+
+    public void setLoginHour(LocalDateTime loginHour) {
+        this.loginHour = loginHour;
+    }
+
+    public LocalDateTime getLogoutHour() {
         return logoutHour;
     }
 
+    public void setLogoutHour(LocalDateTime logoutHour) {
+        this.logoutHour = logoutHour;
+    }
 }

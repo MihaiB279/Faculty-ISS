@@ -21,6 +21,7 @@ public class LoginWindowController {
 
     private EmployeeRepository employeeRepository;
     private WorkerRepository workerRepository;
+    private TaskRepository taskRepository;
 
     @FXML
     public void loginButtonClick() throws IOException {
@@ -36,24 +37,29 @@ public class LoginWindowController {
                 loader = new FXMLLoader(getClass().getClassLoader().getResource("com/example/employeemanagement.views/BossWindow.fxml"));
                 root = loader.load();
                 BossWindowController bossCtrl = loader.<BossWindowController>getController();
+                workerRepository.addObserver(bossCtrl);
                 Boss boss = new Boss(employee.getName(), employee.getUsername(), employee.getPassword(), employee.getIsBoss());
                 bossCtrl.setBoss(boss);
+                bossCtrl.setEmployeeRepository(employeeRepository);
+                bossCtrl.setWorkerRepository(workerRepository);
+                bossCtrl.setTaskRepository(taskRepository);
             }
             else{
                 loader = new FXMLLoader(getClass().getClassLoader().getResource("com/example/employeemanagement.views/WorkerWindow.fxml"));
                 root = loader.load();
                 WorkerWindowController workerCtrl = loader.<WorkerWindowController>getController();
+                taskRepository.addObserver(workerCtrl);
                 Worker worker = new Worker(employee.getName(), employee.getUsername(), employee.getPassword(), employee.getIsBoss());
                 worker.setLogInTime(LocalDateTime.now());
                 workerRepository.updateLoginTime(worker);
                 workerCtrl.setWorker(worker);
                 workerCtrl.setWorkerRepository(workerRepository);
+                workerCtrl.setTaskRepository(taskRepository);
             }
 
             Stage loginStage = new Stage();
             loginStage.setScene(new Scene(root));
             loginStage.show();
-            close();
         }
     }
 
@@ -62,16 +68,13 @@ public class LoginWindowController {
         return employee;
     }
 
-    private void close() {
-        Stage thisStage = (Stage) usernameTxt.getScene().getWindow();
-        thisStage.close();
-    }
-
     public void setEmployeeRepository(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
     public void setWorkerRepository(WorkerRepository workerRepository) {
         this.workerRepository = workerRepository;
     }
-
+    public void setTaskRepository(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 }
